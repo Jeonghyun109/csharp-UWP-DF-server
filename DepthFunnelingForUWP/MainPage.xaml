@@ -1,0 +1,83 @@
+﻿<Page
+    x:Class="DepthFunnelingForUWP.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DepthFunnelingForUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Name="MainPageForUWP" Height="450" Width="2000" Loaded="Window_Loaded">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="99*"/>
+            <ColumnDefinition Width="133*"/>
+            <ColumnDefinition Width="768*"/>
+        </Grid.ColumnDefinitions>
+        <Slider x:Name="constantSlider" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="134,53,0,0" Width="300" Maximum="4" Value="1" IsThumbToolTipEnabled="True" TickFrequency="0.01" ValueChanged="constantValueChanged" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <TextBox x:Name="constantTextBox" TextWrapping="Wrap" Text="{Binding Value, ElementName=constantSlider, UpdateSourceTrigger=PropertyChanged,ConverterParameter=N4}" Margin="174,53,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Height="30" Grid.Column="2"/>
+        <ComboBox x:Name="actuatorComboBox" Margin="110,10,0,0" SelectedIndex="1" Width="120" SelectionChanged="actuatorSelectionChanged" Grid.ColumnSpan="2">
+            <ComboBoxItem Content="2"/>
+            <ComboBoxItem Content="3"/>
+        </ComboBox>
+        <Slider x:Name="frequencySlider" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="134,10,0,0" Width="300" IsThumbToolTipEnabled="True" Maximum="300" Value="235" ValueChanged="frequencyValueChanged" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="69,10,0,0" Text="Frequency" Grid.Column="1"/>
+        <TextBox x:Name="frequencyTextBox" TextWrapping="Wrap" Text="{Binding Value, ElementName=frequencySlider, UpdateSourceTrigger=PropertyChanged}" Margin="174,13,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Height="30" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,10,0,0" Text="# of Actuators"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Function"/>
+        <ComboBox x:Name="functionComboBox" Margin="110,50,0,0" SelectedIndex="0" Width="120" SelectionChanged="functionSelectionChanged" Grid.ColumnSpan="2">
+            <ComboBoxItem Content="Polynomial"/>
+            <ComboBoxItem Content="Exponential"/>
+            <ComboBoxItem Content="Logarithmic"/>
+            <ComboBoxItem Content="Tangent-like"/>
+        </ComboBox>
+        <TextBlock HorizontalAlignment="Left" Margin="69,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Constant" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Feedback Type"/>
+        <ComboBox x:Name="feedbackTypeComboBox" Margin="110,90,0,0" SelectedIndex="0" Width="120" SelectionChanged="feedbackTypeSelectionChanged" Grid.ColumnSpan="2">
+            <ComboBoxItem Content="Constant Time"/>
+            <ComboBoxItem Content="Constant Length"/>
+            <ComboBoxItem Content="Length and Time"/>
+            <ComboBoxItem Content="Continuous"/>
+        </ComboBox>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,139,0,0"><Run Text="Max "/><Run Text="a"/><Run Text="mplitude"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="127,139,0,0" TextWrapping="Wrap" Text="root" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="194,139,0,0" TextWrapping="Wrap" Text="middle" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="82,139,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1"><Run Text="t"/><Run Text="ip"/></TextBlock>
+        <Slider x:Name="rootMaxAmplitudeSlider" HorizontalAlignment="Left" Margin="124,160,0,0" VerticalAlignment="Top" Orientation="Vertical" Height="100" Value="100" Maximum="1"/>
+        <Slider x:Name="middleMaxAmplitudeSlider" HorizontalAlignment="Left" Margin="197,160,0,0" VerticalAlignment="Top" Orientation="Vertical" Height="100" Value="100" Maximum="1" Grid.ColumnSpan="2"/>
+        <Slider x:Name="tipMaxAmplitudeSlider" HorizontalAlignment="Left" Margin="75,160,0,0" VerticalAlignment="Top" Orientation="Vertical" Height="100" Value="100" Maximum="1" Grid.Column="1"/>
+        <TextBox x:Name="rootMaxAmplitudeTextBox" HorizontalAlignment="Left" Height="30" Margin="118,267,0,0" TextWrapping="Wrap" Text="{Binding Value, ElementName=rootMaxAmplitudeSlider, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="40"/>
+        <TextBox x:Name="middleMaxAmplitudeTextBox" HorizontalAlignment="Left" Height="30" Margin="192,267,0,0" TextWrapping="Wrap" Text="{Binding Value, ElementName=middleMaxAmplitudeSlider, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="40" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="tipMaxAmplitudeTextBox" HorizontalAlignment="Left" Height="30" Margin="70,267,0,0" TextWrapping="Wrap" Text="{Binding Value, ElementName=tipMaxAmplitudeSlider, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,361,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Feedback Point"/>
+        <Slider x:Name="feedbackPointSlider" HorizontalAlignment="Left" Margin="114,357,0,0" VerticalAlignment="Top" Width="200" Maximum="2" ValueChanged="feedbackPointValueChanged" IsEnabled="{Binding IsChecked, ElementName=feedbackCheckBox}" Grid.ColumnSpan="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="114,381,0,0" TextWrapping="Wrap" Text="root" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="102,381,0,0" TextWrapping="Wrap" Text="tip" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="feecbackPointTextBox" HorizontalAlignment="Left" Height="30" Margin="136,359,0,0" TextWrapping="Wrap" Text="{Binding Value, ElementName=feedbackPointSlider, UpdateSourceTrigger=PropertyChanged, ConverterParameter=N2}" VerticalAlignment="Top" Width="40" IsEnabled="{Binding IsChecked, ElementName=feedbackCheckBox}" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,322,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Feedback"/>
+        <CheckBox x:Name="feedbackCheckBox" Margin="79,317,0,0" VerticalAlignment="Top" Checked="feedbackCheckBoxChanged" Unchecked="feedbackCheckBoxChanged" Grid.ColumnSpan="2"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="171,139,0,0" Grid.ColumnSpan="2" Grid.Column="1"><Run Text="Current"/><Run Text=" "/><Run Text="a"/><Run Text="mplitude"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="63,139,0,0" TextWrapping="Wrap" Text="root" VerticalAlignment="Top" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="127,139,0,0" TextWrapping="Wrap" Text="middle" VerticalAlignment="Top" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="215,139,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="2"><Run Text="t"/><Run Text="ip"/></TextBlock>
+        <Slider x:Name="rootCurrentAmplitudeSlider" HorizontalAlignment="Left" Margin="58,160,0,0" VerticalAlignment="Top" Orientation="Vertical" Height="100" Maximum="1" IsEnabled="False" Grid.Column="2"/>
+        <Slider x:Name="middleCurrentAmplitudeSlider" HorizontalAlignment="Left" Margin="130,160,0,0" VerticalAlignment="Top" Orientation="Vertical" Height="100" Maximum="1" IsEnabled="False" Grid.Column="2"/>
+        <Slider x:Name="tipCurrentAmplitudeSlider" HorizontalAlignment="Left" Margin="206,160,0,0" VerticalAlignment="Top" Orientation="Vertical" Height="100" Maximum="1" IsEnabled="False" Grid.Column="2"/>
+        <TextBox x:Name="rootCurrentAmplitudeTextBox" HorizontalAlignment="Left" Height="30" Margin="53,266,0,0" TextWrapping="Wrap" Text="{Binding Value, ElementName=rootCurrentAmplitudeSlider, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="40" Grid.Column="2"/>
+        <TextBox x:Name="middleCurrentAmplitudeTextBox" HorizontalAlignment="Left" Height="30" Margin="126,266,0,0" TextWrapping="Wrap" Text="{Binding Value, ElementName=middleCurrentAmplitudeSlider, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="40" Grid.Column="2"/>
+        <TextBox x:Name="tipCurrentAmplitudeTextBox" HorizontalAlignment="Left" Height="30" Margin="202,266,0,0" TextWrapping="Wrap" Text="{Binding Value, ElementName=tipCurrentAmplitudeSlider, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="40" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="69,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1"><Run Text="Activation time"/><Run Text=" (ms)"/></TextBlock>
+        <TextBox x:Name="activationTimeTextBox" HorizontalAlignment="Left" Height="30" Margin="197,89,0,0" TextWrapping="Wrap" Text="30" VerticalAlignment="Top" Width="40" TextChanged="activationTimeTextBox_TextChanged" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="250,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="1"><Run Text="Time interval"/><Run Text=" (ms)"/></TextBlock>
+        <TextBox x:Name="timeIntervalTextBox" HorizontalAlignment="Left" Height="30" Margin="98,89,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" TextChanged="timeIntervalTextBox_TextChanged" Width="40" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="153,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="2"><Run Text="Distance "/><Run Text="division"/></TextBlock>
+        <TextBox x:Name="distanceDivisionTextBox" HorizontalAlignment="Left" Height="30" Margin="263,89,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="40" TextChanged="distanceDivisionTextBox_TextChanged" Grid.Column="2"/>
+        <Canvas Name="graphCanvas" Width="200" Height="100" Margin="42,304,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="LightGray" Grid.Column="2"/>
+        <TextBlock x:Name="progressTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="1158,199,0,0" TextAlignment="Center" Text="Press Enter to Start" Width="110" Grid.Column="2"/>
+
+        <Canvas x:Name="fingerCanvas" HorizontalAlignment="Left" Height="399" Margin="1324,10,0,0" VerticalAlignment="Top" Width="91" Grid.Column="2">
+            <Image Height="399" Source="Assets/finger2.png"/>
+        </Canvas>
+    </Grid>
+</Page>

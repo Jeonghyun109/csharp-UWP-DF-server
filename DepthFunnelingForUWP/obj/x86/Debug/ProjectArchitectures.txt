@@ -1,0 +1,1 @@
+C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\DepthFunnelingForUWP.csproj;x86
