@@ -34,7 +34,8 @@ namespace DepthFunnelingForUWP
         Timer timer;
 
         bool distanceFeedbackActivated = false;
-        double _p = 0;
+        double _pMax = 0;
+        double _pMin = 0;
 
         bool continuousFeedbackActivated = false;
 
@@ -72,7 +73,6 @@ namespace DepthFunnelingForUWP
             // UWP Client (for connection to Unity)
             ConnectToHololens();
 
-            
         }
 
         private async void ConnectToHololens()
@@ -183,27 +183,31 @@ namespace DepthFunnelingForUWP
             }
         }
 
-        private async void ForArduinoManagement()
+        private void ForArduinoManagement()
         {
-            /*  string deviceSelector = SerialDevice.GetDeviceSelectorFromUsbVidPid(2341, 0042);    // It doesn't work...
-            Console.WriteLine(deviceSelector);
-
-            Console.WriteLine("HereHereHere");
-            //string selector = SerialDevice.GetDeviceSelector("COM3");
-            DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(deviceSelector);
-
-            Console.WriteLine("What's the problem?");
-            if (devices.Count > 0)
-            {
-                DeviceInformation deviceInfo = devices[0];
-
-                SerialDevice serialDevice = await SerialDevice.FromIdAsync(deviceInfo.Id);
-
-                portName = "COM3";
-            }   */
             string portName = null;
-            
-            portName = "COM3";  // need to be changed according to USB port
+
+            string deviceSelector = SerialDevice.GetDeviceSelector();
+            var findAsync = DeviceInformation.FindAllAsync(deviceSelector);
+
+            while (findAsync.Status != AsyncStatus.Completed)
+                continue;
+
+            DeviceInformationCollection devices = findAsync.GetResults();
+
+            foreach (var device in devices)
+            {
+                var deviceID = device.Id;
+                if (deviceID.Contains("VID_2341") && deviceID.Contains("PID_0043"))
+                {
+                    var deviceName = device.Name;
+                    int startIdx = deviceName.IndexOf('(');
+                    int endIdx = deviceName.IndexOf(')');
+                    portName = deviceName.Substring(startIdx + 1, endIdx - startIdx - 1);
+                    Debug.WriteLine(portName);
+                }
+            }
+
             port = new SerialPort(portName, 115200);
             port.Open();
         }
@@ -217,7 +221,7 @@ namespace DepthFunnelingForUWP
             currentIndex = -1;
         }
 
-        private async void FileWriting ()
+        private async void FileWriting()
         {
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
             IReadOnlyList<StorageFile> fileList = await storageFolder.GetFilesAsync();
@@ -231,7 +235,7 @@ namespace DepthFunnelingForUWP
                     fileno++;
                 }
             }
-            
+
             file = await storageFolder.CreateFileAsync("result" + fileno + ".csv", CreationCollisionOption.ReplaceExisting);
 
             string i = "Actuator, Setting, Target, Value";
@@ -486,17 +490,25 @@ namespace DepthFunnelingForUWP
             middleAmp = middleMaxAmplitudeSlider.Value * middleCurrentAmp;
             tipAmp = tipMaxAmplitudeSlider.Value * tipCurrentAmp;
 
+            if (p < _pMin)
+                _pMin = p;
+
+            else if (p > _pMax)
+                _pMax = p;
+
             if (timeFeedbackOccured)
             {
                 timeFeedbackOccured = false;
-                _p = p;
+                _pMin = p;
+                _pMax = p;
             }
 
-            if (distanceFeedbackActivated && Math.Abs(p - _p) >= distanceInterval)
+            if (distanceFeedbackActivated && Math.Abs(_pMax - _pMin) >= distanceInterval)
             {
-                _p = p;
+                _pMin = p;
+                _pMax = p;
 #if TYPE_OUTPUT
-				Console.WriteLine("distance feedback");
+				Debug.WriteLine("distance feedback");
 #endif
                 timer.Change(timeInterval, timeInterval);
 

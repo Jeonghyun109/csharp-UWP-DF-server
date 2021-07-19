@@ -38,6 +38,7 @@
       <RootProperty Name="Orientation" />
       <RootProperty Name="Height" />
       <RootProperty Name="IsEnabled" />
+      <RootProperty Name="StepFrequency" />
       <RootEvent Name="ValueChanged" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
