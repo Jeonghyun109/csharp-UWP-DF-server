@@ -19,7 +19,7 @@
     <DeployOptionalPackages>false</DeployOptionalPackages>
     <WindowsSdkPath>C:\Program Files %28x86%29\Windows Kits\10\</WindowsSdkPath>
     <LayoutDir>C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\AppX</LayoutDir>
-    <RegisteredManifestChecksum>A6C89E7856D81FBDD9362982F8F626E264C01EA9045C806B7FBD1FC7110759DF</RegisteredManifestChecksum>
+    <RegisteredManifestChecksum>D26BB9F5199D6C310CBBD148A40F10817372E9CA6836293074BC2456B25FFA10</RegisteredManifestChecksum>
     <RegisteredPackageMoniker>fd2fa600-b028-4132-bfdb-60c22db02529_1.0.0.0_x86__wnj41bbhxkvna</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>fd2fa600-b028-4132-bfdb-60c22db02529_wnj41bbhxkvna!App</RegisteredUserModeAppID>
     <RegisteredPackageID>fd2fa600-b028-4132-bfdb-60c22db02529</RegisteredPackageID>
@@ -30,13 +30,13 @@
     <AppXManifest Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2021-07-19T09:52:20.551</Modified>
+      <Modified>2021-08-01T10:43:55.397</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\DepthFunnelingForUWP.exe">
       <PackagePath>entrypoint\DepthFunnelingForUWP.exe</PackagePath>
-      <Modified>2021-07-19T09:52:20.055</Modified>
+      <Modified>2021-08-01T10:43:54.504</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Microsoft SDKs\UWPNuGetPackages\runtime.win10-x86.microsoft.netcore.universalwindowsplatform\6.2.12\runtimes\win10-x86\lib\uap10.0.15138\System.Runtime.dll">
       <PackagePath>System.Runtime.dll</PackagePath>
@@ -106,11 +106,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2021-07-19T09:52:19.947</Modified>
+      <Modified>2021-08-01T10:39:15.216</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2021-07-19T09:52:19.947</Modified>
+      <Modified>2021-08-01T10:39:15.216</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\10.0.19041.0\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
@@ -118,11 +118,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2021-07-08T07:19:45.109</Modified>
+      <Modified>2021-08-01T09:11:10.422</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\Core\DepthFunnelingForUWP.exe">
       <PackagePath>DepthFunnelingForUWP.exe</PackagePath>
-      <Modified>2021-07-19T09:52:20.547</Modified>
+      <Modified>2021-08-01T10:43:55.389</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

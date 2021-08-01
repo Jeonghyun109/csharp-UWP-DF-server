@@ -15,6 +15,7 @@ using Windows.Devices.Enumeration;
 using Windows.Storage.Streams;
 using Windows.Storage;
 using System.Diagnostics;
+using System.Text;
 
 namespace DepthFunnelingForUWP
 {
@@ -153,29 +154,78 @@ namespace DepthFunnelingForUWP
 
                 Debug.WriteLine("The data is " + request);
 
-                double data;
+                double data;    // finger information
+                List<string> exp_logs = new List<string>();    // experiment log information
+                var log = new StringBuilder();
+
                 if (request != null)
                 {
-                    data = Double.Parse(request);
-
-                    if (data >= 0 && data <= 2)
+                    Debug.WriteLine(request.Length);
+                    for (int i = 0; i < request.Length; i++)
                     {
-                        this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        if (request[i] == ' ')
                         {
-                            if (feedbackCheckBox.IsChecked == false) feedbackCheckBox.IsChecked = true;
-                        });
-                        this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                            Debug.WriteLine("I am appending to list");
+                            exp_logs.Add(log.ToString());
+                            log.Clear();
+                        }
+                        else
                         {
-                            feedbackPointSlider.Value = data;
-                        });
+                            Debug.WriteLine("HHHAHHAHAHAHAHAL:  " + request[i]);
+                            log.Append(request[i]);
+                        }
+                    }
+                    exp_logs.Add(log.ToString());   // append last element, or double data value(don't have ' ')
+                    Debug.WriteLine("exp_log is ... " + String.Join(" : ", exp_logs.ToArray()));
+
+                    if (exp_logs.Count == 1)
+                    {
+                        data = Double.Parse(request);
+
+                        if (data >= 0 && data <= 2)
+                        {
+                            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                            {
+                                if (feedbackCheckBox.IsChecked == false) feedbackCheckBox.IsChecked = true;
+                            });
+                            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                            {
+                                feedbackPointSlider.Value = data;
+                            });
+                        }
+                        else
+                        {
+                            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { feedbackCheckBox.IsChecked = false; });
+                        }
                     }
                     else
                     {
-                        this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        string file = @"C:\Users\HCIL\Desktop\PokingInteraction\Log\log1.txt";
+                        StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                        StorageFile sampleFile = await storageFolder.GetFileAsync("log1.txt");
+
+                        string Log = String.Join(" / ", exp_logs.ToArray()) + "\n";
+
+                        var stream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+                        using (var outputStream = stream.GetOutputStreamAt(0))
                         {
-                            feedbackCheckBox.IsChecked = false;
-                        });
+                            using (var dataWriter = new Windows.Storage.Streams.DataWriter(outputStream))
+                            {
+                                dataWriter.WriteString(Log);
+                            }
+                        }
+                        stream.Dispose(); // Or use the stream variable (see previous code snippet) with a using statement as well.
+                        /*await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
+                            StorageFolder storageFolder =   ApplicationData.Current.LocalFolder;
+                            StorageFile sampleFile = storageFolder.GetFileAsync(file);
+
+                            //FileIO.AppendAllText(file, Log, encoding: default); 
+                        });*/
+
+
+                        //await File.WriteAllTextAsync("ExperimentLog.txt", Log);
                     }
+
                 }
 
 
