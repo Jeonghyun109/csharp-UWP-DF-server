@@ -54,6 +54,8 @@ namespace DepthFunnelingForUWP
         string serverIP = "10.0.1.16";  // IP address of Hololens
         string serverPort = "50000";
 
+        string stringCSV;
+
 
 
         public MainPage()
@@ -151,35 +153,13 @@ namespace DepthFunnelingForUWP
             using (var streamReader = new StreamReader(args.Socket.InputStream.AsStreamForRead()))
             {
                 request = await streamReader.ReadLineAsync();
-
-                Debug.WriteLine("The data is " + request);
-
                 double data;    // finger information
-                List<string> exp_logs = new List<string>();    // experiment log information
-                var log = new StringBuilder();
 
                 if (request != null)
                 {
-                    Debug.WriteLine(request.Length);
-                    for (int i = 0; i < request.Length; i++)
+                    if (!request.Contains(","))
                     {
-                        if (request[i] == ' ')
-                        {
-                            Debug.WriteLine("I am appending to list");
-                            exp_logs.Add(log.ToString());
-                            log.Clear();
-                        }
-                        else
-                        {
-                            Debug.WriteLine("HHHAHHAHAHAHAHAL:  " + request[i]);
-                            log.Append(request[i]);
-                        }
-                    }
-                    exp_logs.Add(log.ToString());   // append last element, or double data value(don't have ' ')
-                    Debug.WriteLine("exp_log is ... " + String.Join(" : ", exp_logs.ToArray()));
-
-                    if (exp_logs.Count == 1)
-                    {
+                        Debug.WriteLine("The data is " + request);
                         data = Double.Parse(request);
 
                         if (data >= 0 && data <= 2)
@@ -200,30 +180,8 @@ namespace DepthFunnelingForUWP
                     }
                     else
                     {
-                        string file = @"C:\Users\HCIL\Desktop\PokingInteraction\Log\log1.txt";
-                        StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-                        StorageFile sampleFile = await storageFolder.GetFileAsync("log1.txt");
-
-                        string Log = String.Join(" / ", exp_logs.ToArray()) + "\n";
-
-                        var stream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-                        using (var outputStream = stream.GetOutputStreamAt(0))
-                        {
-                            using (var dataWriter = new Windows.Storage.Streams.DataWriter(outputStream))
-                            {
-                                dataWriter.WriteString(Log);
-                            }
-                        }
-                        stream.Dispose(); // Or use the stream variable (see previous code snippet) with a using statement as well.
-                        /*await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
-                            StorageFolder storageFolder =   ApplicationData.Current.LocalFolder;
-                            StorageFile sampleFile = storageFolder.GetFileAsync(file);
-
-                            //FileIO.AppendAllText(file, Log, encoding: default); 
-                        });*/
-
-
-                        //await File.WriteAllTextAsync("ExperimentLog.txt", Log);
+                        stringCSV += request + "\n";
+                        WriteOneLine(stringCSV);
                     }
 
                 }
@@ -288,9 +246,9 @@ namespace DepthFunnelingForUWP
 
             file = await storageFolder.CreateFileAsync("result" + fileno + ".csv", CreationCollisionOption.ReplaceExisting);
 
-            string i = "Actuator, Setting, Target, Value";
+            stringCSV = "time(ms),mode,instruction,operation,type,try,success,choice\n";
 
-            WriteOneLine(i);
+            WriteOneLine(stringCSV);
         }
 
         private async void WriteOneLine(string i)
