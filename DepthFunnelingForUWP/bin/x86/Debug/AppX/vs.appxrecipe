@@ -30,13 +30,13 @@
     <AppXManifest Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2021-08-02T08:45:25.952</Modified>
+      <Modified>2021-08-03T11:34:47.877</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\DepthFunnelingForUWP.exe">
       <PackagePath>entrypoint\DepthFunnelingForUWP.exe</PackagePath>
-      <Modified>2021-08-02T08:45:25.104</Modified>
+      <Modified>2021-08-03T11:34:46.903</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Microsoft SDKs\UWPNuGetPackages\runtime.win10-x86.microsoft.netcore.universalwindowsplatform\6.2.12\runtimes\win10-x86\lib\uap10.0.15138\System.Runtime.dll">
       <PackagePath>System.Runtime.dll</PackagePath>
@@ -106,11 +106,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2021-08-02T08:45:24.972</Modified>
+      <Modified>2021-08-03T11:34:46.747</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2021-08-02T08:45:24.972</Modified>
+      <Modified>2021-08-03T11:34:46.746</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\10.0.19041.0\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
@@ -122,7 +122,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HCIL\Desktop\PokingInteraction\DepthFunnelingForUWP\DepthFunnelingForUWP\bin\x86\Debug\Core\DepthFunnelingForUWP.exe">
       <PackagePath>DepthFunnelingForUWP.exe</PackagePath>
-      <Modified>2021-08-02T08:45:25.944</Modified>
+      <Modified>2021-08-03T11:34:47.857</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

@@ -253,19 +253,27 @@ namespace DepthFunnelingForUWP
 
         private async void WriteOneLine(string i)
         {
-            var stream = await file.OpenAsync(FileAccessMode.ReadWrite);
-            // if (stream != null) stream.Dispose();   // 기존의 streamwriter file이 null이면 file.Close() 해준 부분
-            using (var outputStream = stream.GetOutputStreamAt(0))
+            try
             {
-                using (var dataWriter = new DataWriter(outputStream))
+                var stream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                // if (stream != null) stream.Dispose();   // 기존의 streamwriter file이 null이면 file.Close() 해준 부분
+                using (var outputStream = stream.GetOutputStreamAt(0))
                 {
-                    dataWriter.WriteString(i);
+                    using (var dataWriter = new DataWriter(outputStream))
+                    {
+                        dataWriter.WriteString(i);
 
-                    await dataWriter.StoreAsync();  // store text into file
-                    await outputStream.FlushAsync();    // close stream
+                        await dataWriter.StoreAsync();  // store text into file
+                        await outputStream.FlushAsync();    // close stream
+                    }
                 }
+                stream.Dispose(); // Or use the stream variable (see previous code snippet) with a using statement as well.
             }
-            stream.Dispose(); // Or use the stream variable (see previous code snippet) with a using statement as well.
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+
         }
 
         private void timerTask(object timerState)
