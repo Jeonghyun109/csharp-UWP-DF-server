@@ -56,6 +56,8 @@ namespace DepthFunnelingForUWP
 
         string stringCSV;
 
+        string request;
+        double data;
 
 
         public MainPage()
@@ -80,66 +82,13 @@ namespace DepthFunnelingForUWP
 
         private async void ConnectToHololens()
         {
-            /*
             try
             {
-                while (true)
-                {
-                    // Create the StreamSocket and establish a connection to the echo server.
-                    using (var streamSocket = new Windows.Networking.Sockets.StreamSocket())
-                    {
-                        // The server hostname that we will be establishing a connection to. In this example, the server and client are in the same process.
-                        var hostName = new Windows.Networking.HostName(serverIP);
+                var serverDatagramSocket = new Windows.Networking.Sockets.DatagramSocket();
 
-                        await streamSocket.ConnectAsync(hostName, serverPort);
+                serverDatagramSocket.MessageReceived += ServerDatagramSocket_MessageReceived;
 
-                        Debug.WriteLine("client connected");
-
-                        Debug.WriteLine("bf read");
-                        string response;
-                        using (Stream inputStream = streamSocket.InputStream.AsStreamForRead()) 
-                        {
-                            Debug.WriteLine("2", inputStream.ToString());
-                            try
-                            {
-                                using (StreamReader streamReader = new StreamReader(inputStream))
-                                {
-                                    Debug.WriteLine("3");
-                                    response = await streamReader.ReadLineAsync();
-                                }
-
-                                Debug.WriteLine("The data is " + response);
-
-                                double data;
-
-                                data = Double.Parse(response);
-
-                                feedbackPointSlider.Value = data;
-                            }
-                            catch (Exception e)
-                            {
-                                Debug.WriteLine("The process failed: {0}", e.ToString());
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("The process failed: {0}", ex.ToString());
-            }
-            */
-
-            try
-            {
-                var streamSocketListener = new Windows.Networking.Sockets.StreamSocketListener();
-
-                // The ConnectionReceived event is raised when connections are received.
-                streamSocketListener.ConnectionReceived += this.StreamSocketListener_ConnectionReceived;
-
-
-                // Start listening for incoming TCP connections on the specified port. You can specify any port that's not currently in use.
-                await streamSocketListener.BindServiceNameAsync(serverPort);
+                await serverDatagramSocket.BindServiceNameAsync(serverPort);
             }
             catch (Exception ex)
             {
@@ -147,13 +96,12 @@ namespace DepthFunnelingForUWP
             }
         }
 
-        private async void StreamSocketListener_ConnectionReceived(Windows.Networking.Sockets.StreamSocketListener sender, Windows.Networking.Sockets.StreamSocketListenerConnectionReceivedEventArgs args)
+        private async void ServerDatagramSocket_MessageReceived(Windows.Networking.Sockets.DatagramSocket sender, Windows.Networking.Sockets.DatagramSocketMessageReceivedEventArgs args)
         {
-            string request;
-            using (var streamReader = new StreamReader(args.Socket.InputStream.AsStreamForRead()))
+
+            using (DataReader dataReader = args.GetDataReader())
             {
-                request = await streamReader.ReadLineAsync();
-                double data;    // finger information
+                request = dataReader.ReadString(dataReader.UnconsumedBufferLength).Trim();
 
                 if (request != null)
                 {
@@ -164,31 +112,65 @@ namespace DepthFunnelingForUWP
 
                         if (data >= 0 && data <= 2)
                         {
-                            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                            this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                             {
                                 if (feedbackCheckBox.IsChecked == false) feedbackCheckBox.IsChecked = true;
                             });
-                            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                            this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                             {
                                 feedbackPointSlider.Value = data;
                             });
                         }
                         else
                         {
-                            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { feedbackCheckBox.IsChecked = false; });
+                            this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { feedbackCheckBox.IsChecked = false; });
+                        }
+
+                        // For discrete feedback
+                        if (data == 11) // point_1 discrete feedback
+                        {
+                            this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                            {
+                                //  tip amplitude 100
+                                tipMaxAmplitudeSlider.Value = 1;
+                            });
+                        }
+                        else if (data == 22) // point_2 discrete feedback
+                        {
+                            this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                            {
+                                //  middle amplitude 100
+                                middleMaxAmplitudeSlider.Value = 1;
+                            });
+                        }
+                        else if (data == 33) // point_3 discrete feedback
+                        {
+                            this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                            {
+                                //  root amplitude 100
+                                rootMaxAmplitudeSlider.Value = 1;
+                            });
+                        }
+                        else if (data == 44)
+                        {
+                            // 진동 세기 원래대로 돌려놓기
+                            this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                            {
+                                tipMaxAmplitudeSlider.Value = 0.3;
+                                middleMaxAmplitudeSlider.Value = 0.7;
+                                rootMaxAmplitudeSlider.Value = 1;
+                            });
                         }
                     }
                     else
                     {
+                        Debug.WriteLine(request);
                         stringCSV += request + "\n";
                         WriteOneLine(stringCSV);
                     }
-
                 }
-
-
-
             }
+
         }
 
         private void ForArduinoManagement()
