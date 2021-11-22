@@ -127,7 +127,7 @@ namespace DepthFunnelingForUWP
                         }
 
                         // For discrete feedback
-                        if (data == 11) // point_1 discrete feedback
+                        /*if (data == 11) // point_1 discrete feedback
                         {
                             this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                             {
@@ -160,7 +160,7 @@ namespace DepthFunnelingForUWP
                                 middleMaxAmplitudeSlider.Value = 0.7;
                                 rootMaxAmplitudeSlider.Value = 1;
                             });
-                        }
+                        }*/
                     }
                     else
                     {
@@ -218,7 +218,7 @@ namespace DepthFunnelingForUWP
 
             int fileno = 1;
 
-            foreach (StorageFile onefile in fileList)   // 불안한 부분 : foreach를 사용했을 때, fileno에 맞추어 정렬된 순서로 검사가 이루어지면 성공, 그렇지 않으면 불완전한 코드
+            foreach (StorageFile onefile in fileList)
             {
                 if (onefile.Name == "result" + fileno.ToString() + ".csv")
                 {
@@ -228,7 +228,9 @@ namespace DepthFunnelingForUWP
 
             file = await storageFolder.CreateFileAsync("result" + fileno + ".csv", CreationCollisionOption.ReplaceExisting);
 
-            stringCSV = "time(ms),mode,instruction,operation,type,try,success,choice\n";
+            stringCSV = "time(ms),mode,instruction,operation,type,try,success,choice\n";    // need to be changed according to what experiment is performed
+            // in the case of 2nd experiment, the log will be ...
+            // stringCSV = "time(ms), instruction, keyworkd, button, highlight, type, try, success\n";
 
             WriteOneLine(stringCSV);
         }
